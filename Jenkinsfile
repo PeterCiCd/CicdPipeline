@@ -72,9 +72,10 @@ pipeline {
            steps {
                withCredentials([usernamePassword(credentialsId: 'NEXUS_USER', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                    sh 'docker build -t demo-app:$TAG .'
-                   sh 'docker tag demo-app:$TAG nexus:5000/repository/demo/demo-app:$TAG'
-                   sh 'docker login --username $USERNAME --password $PASSWORD http://nexus:5000/repository/demo '
-                   sh 'docker push nexus:5000/demo/demo-app:$TAG'
+                   sh 'docker tag demo-app:$TAG  nexus.docker.internal:5000/repository/demo/demo-app:$TAG'
+                   sh 'docker login --username $USERNAME --password $PASSWORD http://nexus.docker.internal:5000/repository/demo '
+                   sh 'docker push  nexus.docker.internal:5000/repository/demo/demo-app:$TAG'
+                   sh 'docker rmi  nexus.docker.internal:5000/repository/demo/demo-app:$TAG'
                }
            }
        }
