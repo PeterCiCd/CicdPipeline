@@ -4,7 +4,8 @@ pipeline {
         label "mvn_agent"
     }
     environment {
-        PACKAGE_VERSION = "${GIT_BRANCH}-${GIT_COMMIT}"
+//        PACKAGE_VERSION = "${GIT_BRANCH}-${GIT_COMMIT}"
+         PACKAGE_VERSION = ""
     }
     parameters {
         choice (
@@ -34,6 +35,9 @@ pipeline {
         
         stage("Build maven"){
             steps {
+                script {
+                    env.PACKAGE_VERSION = sh (mvn help:evaluate -Dexpression=project.version -q -DforceStdout').trim()
+                }
                 sh 'mvn package \
                 -Dmaven.test.skip=true \
                 -Dapp=cicd-demo-app \
