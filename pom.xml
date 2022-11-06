@@ -17,7 +17,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
-		<revision>2022.11.06-1</revision>
+		<revision>1.0.0-SNAPSHOT</revision>
 		<app>cicd-demo-app</app>
 	</properties>
 	<dependencies>

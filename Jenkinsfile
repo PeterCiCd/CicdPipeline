@@ -4,8 +4,7 @@ pipeline {
         label "mvn_agent"
     }
     environment {
-//        PACKAGE_VERSION = "${GIT_BRANCH}-${GIT_COMMIT}"
-         PACKAGE_VERSION = ""
+        PACKAGE_VERSION = "${GIT_BRANCH}-${GIT_COMMIT}"
     }
     parameters {
         choice (
@@ -29,15 +28,11 @@ pipeline {
         stage("Run tests"){
             steps{
                 sh 'mvn test'
-                echo 'test finish'
             }
         }
         
         stage("Build maven"){
             steps {
-                script {
-                    env.PACKAGE_VERSION = sh (mvn help:evaluate -Dexpression=project.version -q -DforceStdout').trim()
-                }
                 sh 'mvn package \
                 -Dmaven.test.skip=true \
                 -Dapp=cicd-demo-app \
@@ -64,12 +59,12 @@ pipeline {
         }
 
        stage("Docker build and push"){
-//           when {
-//               anyOf {
-//                   branch 'master'
-//                   expression { params.DOCKER_BUILD == 'yes' }
-//              }
-//           }
+           when {
+               anyOf {
+                   branch 'master'
+                   expression { params.DOCKER_BUILD == 'yes' }
+              }
+           }
            environment {
                TAG = "${params.DOCKER_TAG}"
            }
